@@ -47,6 +47,7 @@ public class WebViewBridgeManager extends ReactWebViewManager {
         switch (commandId) {
             case COMMAND_SEND_TO_BRIDGE:
                 sendToBridge(root, args.getString(0));
+                root.requestFocus();
                 break;
             default:
                 //do nothing!!!!
