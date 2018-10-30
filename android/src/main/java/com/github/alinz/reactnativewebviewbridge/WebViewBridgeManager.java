@@ -1,6 +1,7 @@
 package com.github.alinz.reactnativewebviewbridge;
 
 import android.webkit.WebView;
+import android.app.Activity;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -60,19 +61,14 @@ public class WebViewBridgeManager extends ReactWebViewManager {
         WebViewBridgeManager.evaluateJavascript(root, script);
     }
 
-    static private void evaluateJavascript(WebView root, String javascript) {
+    static private void evaluateJavascript(final WebView root, String javascript) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             root.evaluateJavascript(javascript, null);
         } else {
             root.loadUrl("javascript:" + javascript);
         }
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            public void run() {
-                root.requestFocus();
-            }
-        }, 100);
+        root.requestFocus();
     }
 
     @ReactProp(name = "allowFileAccessFromFileURLs")
