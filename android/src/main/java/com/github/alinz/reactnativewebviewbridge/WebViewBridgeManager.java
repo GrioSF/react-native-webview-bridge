@@ -9,6 +9,8 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.annotation.Nullable;
 
@@ -64,7 +66,13 @@ public class WebViewBridgeManager extends ReactWebViewManager {
         } else {
             root.loadUrl("javascript:" + javascript);
         }
-        root.requestFocus();
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                root.requestFocus();
+            }
+        }, 100);
     }
 
     @ReactProp(name = "allowFileAccessFromFileURLs")
