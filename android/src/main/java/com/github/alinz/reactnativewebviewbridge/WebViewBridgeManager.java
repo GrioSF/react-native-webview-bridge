@@ -47,7 +47,6 @@ public class WebViewBridgeManager extends ReactWebViewManager {
         switch (commandId) {
             case COMMAND_SEND_TO_BRIDGE:
                 sendToBridge(root, args.getString(0));
-                root.requestFocus();
                 break;
             default:
                 //do nothing!!!!
@@ -65,6 +64,7 @@ public class WebViewBridgeManager extends ReactWebViewManager {
         } else {
             root.loadUrl("javascript:" + javascript);
         }
+        root.requestFocus();
     }
 
     @ReactProp(name = "allowFileAccessFromFileURLs")
