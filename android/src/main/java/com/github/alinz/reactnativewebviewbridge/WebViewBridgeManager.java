@@ -5,6 +5,7 @@ import android.app.Activity;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.views.webview.ReactWebViewManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
@@ -56,19 +57,36 @@ public class WebViewBridgeManager extends ReactWebViewManager {
         }
     }
 
-    private void sendToBridge(WebView root, String message) {
+    private void sendToBridge(final WebView root, String message) {
         String script = "WebViewBridge.onMessage('" + message + "');";
         WebViewBridgeManager.evaluateJavascript(root, script);
+        // TODO: REmove hack and refactor to add a method to component to set focus to webView
+        final Activity activity = ((ThemedReactContext) root.getContext()).getCurrentActivity();
+        final Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        root.clearFocus();
+                        root.requestFocus();
+                    }
+                });
+                if (root.hasFocus()) {
+                    timer.cancel();
+                }
+            }
+        }, 10);
+        root.clearFocus();
+        root.requestFocus();
     }
 
-    static private void evaluateJavascript(final WebView root, String javascript) {
+    static private void evaluateJavascript(WebView root, String javascript) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             root.evaluateJavascript(javascript, null);
         } else {
             root.loadUrl("javascript:" + javascript);
         }
-
-        root.requestFocus();
     }
 
     @ReactProp(name = "allowFileAccessFromFileURLs")

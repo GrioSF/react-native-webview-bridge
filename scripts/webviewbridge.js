@@ -22,7 +22,7 @@
     window.location = RNWBSchema + '://message' + new Date().getTime();
   }
 
-  //I made the private function ugly signiture so user doesn't called them accidently.
+  //I made the private function ugly signature so user doesn't call them accidently.
   //if you do, then I have nothing to say. :(
   var WebViewBridge = {
     //this function will be called by native side to push a new message

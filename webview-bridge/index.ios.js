@@ -105,9 +105,7 @@ var WebViewBridge = createReactClass({
      * Will be called once the message is being sent from webview
      */
     onBridgeMessage: PropTypes.func,
-
     hideKeyboardAccessoryView: PropTypes.bool,
-
     keyboardDisplayRequiresUserAction: PropTypes.bool,
   },
 
