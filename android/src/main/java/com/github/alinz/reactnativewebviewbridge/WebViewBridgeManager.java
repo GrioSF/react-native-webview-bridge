@@ -54,18 +54,18 @@ public class WebViewBridgeManager extends ReactWebViewManager {
     public void receiveCommand(WebView root, int commandId, @Nullable ReadableArray args) {
         super.receiveCommand(root, commandId, args);
 
+        InputMethodManager imm = (InputMethodManager) root.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+
         switch (commandId) {
             case COMMAND_SEND_TO_BRIDGE:
                 sendToBridge(root, args.getString(0));
                 break;
             case COMMAND_SHOW_KEYBOARD:
                 root.requestFocus();
-                InputMethodManager imm = (InputMethodManager) root.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(root, InputMethodManager.SHOW_FORCED);
                 break;
             case COMMAND_HIDE_KEYBOARD:
                 root.clearFocus();
-                InputMethodManager imm = (InputMethodManager) root.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(root.getWindowToken(), 0);
                 break;
             default:
