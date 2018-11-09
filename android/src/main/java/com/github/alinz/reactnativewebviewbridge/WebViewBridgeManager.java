@@ -53,7 +53,6 @@ public class WebViewBridgeManager extends ReactWebViewManager {
     @Override
     public void receiveCommand(WebView root, int commandId, @Nullable ReadableArray args) {
         super.receiveCommand(root, commandId, args);
-
         InputMethodManager imm = (InputMethodManager) root.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         switch (commandId) {
@@ -69,7 +68,6 @@ public class WebViewBridgeManager extends ReactWebViewManager {
                 imm.hideSoftInputFromWindow(root.getWindowToken(), 0);
                 break;
             default:
-                //do nothing!!!!
         }
     }
 
