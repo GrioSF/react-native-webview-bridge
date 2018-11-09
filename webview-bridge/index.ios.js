@@ -232,6 +232,14 @@ var WebViewBridge = createReactClass({
     WebViewBridgeManager.sendToBridge(this.getWebViewBridgeHandle(), message);
   },
 
+  showKeyboard: function () {
+    // noop on ios
+  },
+
+  hideKeyboard: function () {
+    // noop on ios
+  },
+
   /**
    * We return an event with a bunch of fields including:
    *  url, title, loading, canGoBack, canGoForward

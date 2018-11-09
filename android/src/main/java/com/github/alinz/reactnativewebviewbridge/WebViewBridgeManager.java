@@ -2,6 +2,8 @@ package com.github.alinz.reactnativewebviewbridge;
 
 import android.webkit.WebView;
 import android.app.Activity;
+import android.view.inputmethod.InputMethodManager;
+import android.content.Context;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -20,6 +22,8 @@ public class WebViewBridgeManager extends ReactWebViewManager {
     private static final String REACT_CLASS = "RCTWebViewBridge";
 
     public static final int COMMAND_SEND_TO_BRIDGE = 101;
+    public static final int COMMAND_SHOW_KEYBOARD = 102;
+    public static final int COMMAND_HIDE_KEYBOARD = 103;
 
     @Override
     public String getName() {
@@ -33,6 +37,8 @@ public class WebViewBridgeManager extends ReactWebViewManager {
         Map<String, Integer> commandsMap = super.getCommandsMap();
 
         commandsMap.put("sendToBridge", COMMAND_SEND_TO_BRIDGE);
+        commandsMap.put("showKeyboard", COMMAND_SHOW_KEYBOARD);
+        commandsMap.put("hideKeyboard", COMMAND_HIDE_KEYBOARD);
 
         return commandsMap;
     }
@@ -52,33 +58,24 @@ public class WebViewBridgeManager extends ReactWebViewManager {
             case COMMAND_SEND_TO_BRIDGE:
                 sendToBridge(root, args.getString(0));
                 break;
+            case COMMAND_SHOW_KEYBOARD:
+                root.requestFocus();
+                InputMethodManager imm = (InputMethodManager) root.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(root, InputMethodManager.SHOW_FORCED);
+                break;
+            case COMMAND_HIDE_KEYBOARD:
+                root.clearFocus();
+                InputMethodManager imm = (InputMethodManager) root.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(root.getWindowToken(), 0);
+                break;
             default:
                 //do nothing!!!!
         }
     }
 
-    private void sendToBridge(final WebView root, String message) {
+    private void sendToBridge(WebView root, String message) {
         String script = "WebViewBridge.onMessage('" + message + "');";
         WebViewBridgeManager.evaluateJavascript(root, script);
-        // TODO: REmove hack and refactor to add a method to component to set focus to webView
-        final Activity activity = ((ThemedReactContext) root.getContext()).getCurrentActivity();
-        final Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            public void run() {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        root.clearFocus();
-                        root.requestFocus();
-                    }
-                });
-                if (root.hasFocus()) {
-                    timer.cancel();
-                }
-            }
-        }, 10);
-        root.clearFocus();
-        root.requestFocus();
     }
 
     static private void evaluateJavascript(WebView root, String javascript) {

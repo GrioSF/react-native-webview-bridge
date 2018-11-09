@@ -177,6 +177,22 @@ var WebViewBridge = createReactClass({
     );
   },
 
+  showKeyboard: function () {
+    UIManager.dispatchViewManagerCommand(
+      this.getWebViewBridgeHandle(),
+      UIManager.RCTWebViewBridge.Commands.showKeyboard,
+      null
+    );
+  },
+
+  hideKeyboard: function () {
+    UIManager.dispatchViewManagerCommand(
+      this.getWebViewBridgeHandle(),
+      UIManager.RCTWebViewBridge.Commands.hideKeyboard,
+      null
+    );
+  },
+
   /**
    * We return an event with a bunch of fields including:
    *  url, title, loading, canGoBack, canGoForward
