@@ -43,6 +43,11 @@
 
 RCT_EXPORT_MODULE()
 
++ (BOOL)requiresMainQueueSetup
+{
+    return YES;
+}
+
 - (UIView *)view
 {
   RCTWebViewBridge *webView = [RCTWebViewBridge new];
